@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import dataset as ds
+import numpy as np
 from environment import Environment
 
 def main():
@@ -25,8 +26,12 @@ def main():
         selectbox_dataset = st.sidebar.selectbox("Dataset", dataset_options)
         file = ds.read_file(selectbox_dataset)
         env = Environment(file)
-        for i in env.print_jobs:
+        for i in env.dataset_content():
             st.text(i)
+        st.markdown("""---""")
+        for j in env.print_jobs():
+            st.text(j)
+
 
     elif env_params == "Abrir arquivo":
         pass
