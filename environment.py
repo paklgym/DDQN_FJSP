@@ -3,6 +3,7 @@ import entities.machine as Machine
 import entities.operation as Operation
 import entities.machine_operation as MachineOperation
 import entities.finished_job as FinishedJob
+import dispatching_rules.dispatching_rules as DR
 import numpy as np
 import re
 from copy import deepcopy
@@ -108,6 +109,42 @@ class Environment:
                 self.completed_jobs.append(FinishedJob(job.id, deepcopy(job.makespan)))
                 job.makespan = 0
                 job.current_op = 1
+
+    def run_environment(self):
+        simulation_running = False
+
+        while len(self.available_jobs) > 0:
+            decision = DR.SPT(self.available_jobs, self.machines)
+            self.queue_job(*decision)
+
+            self.start_jobs()
+            while len(self.completed_jobs) < 1500:
+                self.pass_time()
+                self.end_operations()
+                self.finish_jobs()
+
+        # Chamada para decisão do agente (deve retornar job_id, machine_id) e usar o método:
+        # env.queue_job(job_id, machine_id)
+        while len(self.available_jobs) > 0:
+            decision = DR.SPT(self.available_jobs, self.machines)
+            self.queue_job(*decision)
+
+        self.start_jobs()
+
+        jobs = [np.array([]) for job in self.jobs]
+
+
+        for job in self.completed_jobs:
+            jobs[job.job_id - 1] = np.append(jobs[job.job_id - 1], job.makespan)
+
+        completed_jobs = [len(job) for job in jobs]
+
+        jobs = [np.average(job) for job in jobs]
+
+        data = {'Job': [i for i in range(1, len(jobs)+1)],
+                'Makespan médio': jobs,
+                'Jobs completados': completed_jobs }
+        return data
 
     def print_jobs(self):
         retorno = []

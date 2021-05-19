@@ -44,6 +44,10 @@ def main():
     n_actions = st.sidebar.slider("Número de ações", 0, 100, 50)
     epsilon = st.sidebar.slider("Epsilon", 0, 100, 50)
     
+    # Iniciar o treinamento
+    btn_start_simulation = st.sidebar.button("Iniciar Treinamento")
+    if(btn_start_simulation):
+        st.text(env.run_environment())
 
 if __name__ == '__main__':
     main()
