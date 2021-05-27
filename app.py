@@ -23,14 +23,18 @@ def main():
 
     if env_params == "Selecionar exemplo":
         dataset_options = ds.list_files()
-        selectbox_dataset = st.sidebar.selectbox("Dataset", dataset_options)
+        selectbox_dataset = st.sidebar.selectbox("Dataset", dataset_options, 18)
         file = ds.read_file(selectbox_dataset)
         env = Environment(file)
-        for i in env.dataset_content():
-            st.text(i)
-        st.markdown("""---""")
-        for j in env.print_jobs():
-            st.text(j)
+        if st.checkbox("Exibir Dataset"):
+           jobs = env.dataset_content()
+           for job in jobs:
+               st.text(job)
+            
+        if st.checkbox("Exibir detalhes Dataset"):
+            jobs = env.print_jobs()
+            for job in jobs:
+                st.text(job)
 
 
     elif env_params == "Abrir arquivo":
@@ -41,8 +45,10 @@ def main():
     st.sidebar.subheader("Parâmetros do Agente")
     alpha = st.sidebar.slider("Alpha", 0, 100, 50)
     gamma = st.sidebar.slider("Gamma", 0, 100, 50)
-    n_actions = st.sidebar.slider("Número de ações", 0, 100, 50)
     epsilon = st.sidebar.slider("Epsilon", 0, 100, 50)
+    n_actions = st.sidebar.slider("Número de ações", 0, 100, 50)
+    batch_size = st.sidebar.slider("Tamanho do batch", 0, 100, 50)
+    mem_size = st.sidebar.slider("Tamanho do replay de memória", 0, 100, 50)
     
     # Iniciar o treinamento
     btn_start_simulation = st.sidebar.button("Iniciar Treinamento")

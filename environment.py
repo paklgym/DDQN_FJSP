@@ -4,6 +4,8 @@ import entities.operation as Operation
 import entities.machine_operation as MachineOperation
 import entities.finished_job as FinishedJob
 import dispatching_rules.dispatching_rules as DR
+import matplotlib as plt
+import pandas as pd
 import numpy as np
 import re
 from copy import deepcopy
@@ -155,6 +157,13 @@ class Environment:
                 for maquina_op in operacao.machine_ops:
                     retorno.append('\t\tMáquina ' + str(maquina_op.machine_no) + ': ' + str(maquina_op.proc_time) + ' UT')
         return(retorno)
+
+    def print_dataframe(self):
+        aux_plan = []
+        for job in self.jobs:
+            aux_plan.append(job.plan)
+        return len(aux_plan)
+
 
     def print_events(self):
         for event in self.events:
