@@ -4,8 +4,6 @@ import entities.operation as Operation
 import entities.machine_operation as MachineOperation
 import entities.finished_job as FinishedJob
 import dispatching_rules.dispatching_rules as DR
-import matplotlib as plt
-import pandas as pd
 import numpy as np
 import re
 from copy import deepcopy
@@ -18,6 +16,8 @@ class Environment:
         self.completed_jobs = []
         self.events = []
         self.dataset = []
+        self.n_jobs = 0
+        self.n_machines = 0
         self.time = 0
 
         content = file.readlines()
@@ -113,7 +113,6 @@ class Environment:
                 job.current_op = 1
 
     def run_environment(self):
-        simulation_running = False
 
         while len(self.available_jobs) > 0:
             decision = DR.SPT(self.available_jobs, self.machines)
@@ -143,9 +142,21 @@ class Environment:
 
         jobs = [np.average(job) for job in jobs]
 
-        data = {'Job': [i for i in range(1, len(jobs)+1)],
-                'Makespan médio': jobs,
-                'Jobs completados': completed_jobs }
+    def env_reset(self):
+        self.machines = []
+        self.jobs = []
+        self.available_jobs = []
+        self.completed_jobs = []
+        self.events = []
+        self.dataset = []
+        self.n_jobs = 0
+        self.n_machines = 0
+        self.time = 0
+
+    def env_render(self):
+        data = {'Job': [i for i in range(1, len(self.jobs)+1)],
+                'Makespan médio': self.jobs,
+                'Jobs completados': self.completed_jobs }
         return data
 
     def print_jobs(self):

@@ -3,7 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import dataset as ds
 import numpy as np
-from environment import Environment
+from environment.environment import Environment
+import agent.ddqn_agent as agent  
 
 def main():
     st.title("Solucionador de escalonamento FJSP")
@@ -53,7 +54,7 @@ def main():
     # Iniciar o treinamento
     btn_start_simulation = st.sidebar.button("Iniciar Treinamento")
     if(btn_start_simulation):
-        st.text(env.run_environment())
+        agent.AgentTrainer.start_train()
 
 if __name__ == '__main__':
     main()
